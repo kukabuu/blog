@@ -57,6 +57,8 @@ router.post("/register", (req, res) => {
           })
             .then(user => {
               console.log(user);
+              req.session.userId = user.id;
+              req.session.userLogin = user.login;
               res.json({
                 ok: true
               });
@@ -113,7 +115,11 @@ router.post("/login", (req, res) => {
                 fields: ["login", "password"]
               });
             } else {
-              //
+              req.session.userId = user.id;
+              req.session.userLogin = user.login;
+              res.json({
+                ok: true
+              });
             }
           });
         }
@@ -125,6 +131,18 @@ router.post("/login", (req, res) => {
           error: "Ошибка, попробуйте позже!"
         });
       });
+  }
+});
+
+//GET for logout
+router.get("/logout", (req, res) => {
+  if (req.session) {
+    //delete session object
+    req.session.destroy(() => {
+      res.redirect("/");
+    });
+  } else {
+    res.redirect("/");
   }
 });
 

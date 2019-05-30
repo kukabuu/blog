@@ -5,10 +5,11 @@ $(function() {
 	var flag = true;
 	$(".switch-button").on("click", function(e) {
 		e.preventDefault();
-		console.log(12);
+
+		$("input").val("");
 		$(".box.auth p.error").remove();
 		$("input").removeClass("error");
-		$("input").val("");
+		//$(".box.auth p.success").remove();
 
 		if (flag) {
 			flag = false;
@@ -25,12 +26,14 @@ $(function() {
 	$("input").on("focus", function() {
 		$("p.error").remove();
 		$("input").removeClass("error");
+		//$("p.success").remove();
 	});
 
 	//register
 	$(".register-button").on("click", function(e) {
 		e.preventDefault();
-		$(".register p.error").remove();
+		$("p.error").remove();
+		$("input").removeClass("error");
 
 		var data = {
 			login: $("#register-login").val(),
@@ -52,14 +55,16 @@ $(function() {
 					});
 				}
 			} else {
-				$(".register h2").after("<p class='success'>Отлично!</p>");
+				//$(".register h2").after("<p class='success'>Отлично!</p>");
+				$(location).attr("href", "/");
 			}
 		});
 	});
 	//login
 	$(".login-button").on("click", function(e) {
 		e.preventDefault();
-		$(".login p.error").remove();
+		$("p.error").remove();
+		$("input").removeClass("error");
 
 		var data = {
 			login: $("#login-login").val(),
@@ -80,7 +85,8 @@ $(function() {
 					});
 				}
 			} else {
-				$(".login h2").after("<p class='success'>Отлично!</p>");
+				//$(".login h2").after("<p class='success'>Отлично!</p>");
+				$(location).attr("href", "/");
 			}
 		});
 	});
