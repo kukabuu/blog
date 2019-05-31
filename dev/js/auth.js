@@ -1,15 +1,19 @@
 /* eslint-disable no-undef */
 
 $(function() {
+	//remove errors
+	function removeErrors() {
+		$("form.login p.error, form.register p.error").remove();
+		$("form.login input, form.register input").removeClass("error");
+	}
+
 	//toggle
 	var flag = true;
 	$(".switch-button").on("click", function(e) {
 		e.preventDefault();
 
 		$("input").val("");
-		$(".box.auth p.error").remove();
-		$("input").removeClass("error");
-		//$(".box.auth p.success").remove();
+		removeErrors();
 
 		if (flag) {
 			flag = false;
@@ -23,17 +27,14 @@ $(function() {
 	});
 
 	//clear
-	$("input").on("focus", function() {
-		$("p.error").remove();
-		$("input").removeClass("error");
-		//$("p.success").remove();
+	$("form.login input, form.register input").on("focus", function() {
+		removeErrors();
 	});
 
 	//register
 	$(".register-button").on("click", function(e) {
 		e.preventDefault();
-		$("p.error").remove();
-		$("input").removeClass("error");
+		removeErrors();
 
 		var data = {
 			login: $("#register-login").val(),
@@ -55,16 +56,15 @@ $(function() {
 					});
 				}
 			} else {
-				//$(".register h2").after("<p class='success'>Отлично!</p>");
 				$(location).attr("href", "/");
 			}
 		});
 	});
+
 	//login
 	$(".login-button").on("click", function(e) {
 		e.preventDefault();
-		$("p.error").remove();
-		$("input").removeClass("error");
+		removeErrors();
 
 		var data = {
 			login: $("#login-login").val(),
@@ -85,7 +85,6 @@ $(function() {
 					});
 				}
 			} else {
-				//$(".login h2").after("<p class='success'>Отлично!</p>");
 				$(location).attr("href", "/");
 			}
 		});

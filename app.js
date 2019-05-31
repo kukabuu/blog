@@ -19,6 +19,7 @@ mongoose.connection
 	.once("open", () => {
 		const info = mongoose.connections[0];
 		console.log(`Connected to ${info.host}:${info.port}/${info.name}`);
+		//require("./mocks");
 	});
 mongoose.connect(config.MONGO_URL, { useNewUrlParser: true });
 
@@ -49,18 +50,9 @@ app.use(
 );
 
 //routes
-app.get("/", (req, res) => {
-	const id = req.session.userId;
-	const login = req.session.userLogin;
-
-	res.render("index", {
-		user: {
-			id,
-			login
-		}
-	});
-});
+app.use("/", routes.archive);
 app.use("/api/auth", routes.auth);
+app.use("/post", routes.post);
 
 //catch 404 and forward to error handler
 app.use((req, res, next) => {

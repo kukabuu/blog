@@ -85,7 +85,8 @@ textarea {
 }
 
 input,
-textarea {
+textarea,
+.add-post form div #post-body {
   &.error {
     border-color: $errorColor;
     color: $errorColor;

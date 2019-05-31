@@ -38,9 +38,13 @@ gulp.task("nodemon", function(done) {
 
 gulp.task("scripts", function(done) {
 	gulp
-		.src(["dev/js/auth.js"])
+		.src([
+			"dev/js/auth.js",
+			"dev/js/post.js",
+			"node_modules/medium-editor/dist/js/medium-editor.min.js"
+		])
 		.pipe(concat("scripts.js"))
-		.pipe(uglify())
+		//.pipe(uglify())
 		.pipe(gulp.dest("public/javascripts"));
 	done();
 });
