@@ -6,7 +6,6 @@ $(function() {
 		$("form.login p.error, form.register p.error").remove();
 		$("form.login input, form.register input").removeClass("error");
 	}
-
 	//toggle
 	var flag = true;
 	$(".switch-button").on("click", function(e) {
@@ -56,11 +55,11 @@ $(function() {
 					});
 				}
 			} else {
+				//$(".register h2").after("<p class='success'>Отлично!</p>");
 				$(location).attr("href", "/");
 			}
 		});
 	});
-
 	//login
 	$(".login-button").on("click", function(e) {
 		e.preventDefault();
@@ -85,6 +84,7 @@ $(function() {
 					});
 				}
 			} else {
+				//$(".login h2").after("<p class='success'>Отлично!</p>");
 				$(location).attr("href", "/");
 			}
 		});

@@ -16,7 +16,7 @@ function posts(req, res) {
 		.populate("owner")
 		.sort({ createdAt: -1 })
 		.then(posts => {
-			models.Post.count()
+			models.Post.countDocuments()
 				.then(count => {
 					res.render("archive/index", {
 						posts,
@@ -89,7 +89,7 @@ router.get("/users/:login/:page*?", (req, res) => {
 			.limit(perPage)
 			.sort({ createdAt: -1 })
 			.then(posts => {
-				models.Post.count({
+				models.Post.countDocuments({
 					owner: user.id
 				})
 					.then(count => {
