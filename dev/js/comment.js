@@ -3,22 +3,29 @@
 $(function() {
 	let commentForm;
 	let parentId;
-	//add form
-	$("#new, #reply").on("click", function() {
+
+	function form(isNew, comment) {
 		if (commentForm) {
 			commentForm.remove();
 		}
 		parentId = null;
 		commentForm = $(".comment").clone(true, true);
 
-		if ($(this).attr("id") === "new") {
+		if (isNew) {
 			commentForm.appendTo(".comment-list");
 		} else {
-			let parentComment = $(this).parent();
+			let parentComment = $(comment).parent();
 			parentId = parentComment.attr("id");
-			$(this).after(commentForm);
+			$(comment).after(commentForm);
 		}
 		commentForm.css({ display: "flex" });
+	}
+	//load
+	form(true);
+
+	//add form
+	$(".reply").on("click", function() {
+		form(false, this);
 	});
 	//cancel form
 	$("form.comment .cancel").on("click", function(e) {

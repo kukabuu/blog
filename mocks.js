@@ -8,7 +8,7 @@ const owner = "5cf1053a996282132cfdbca6";
 module.exports = () => {
 	models.Post.remove()
 		.then(() => {
-			Array.from({ length: 20 }).forEach(() => {
+			Array.from({ length: 10 }).forEach(() => {
 				const turndownService = new TurndownService();
 
 				models.Post.create({
