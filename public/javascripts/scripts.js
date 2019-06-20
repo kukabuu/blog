@@ -108,13 +108,20 @@ $(function() {
 	});
 
 	//publish
-	$(".publish-button").on("click", function(e) {
+	$(".publish-button, .save-button").on("click", function(e) {
 		e.preventDefault();
 		removeErrors();
 
-		var data = {
+		let isDraft =
+			$(this)
+				.attr("class")
+				.split(" ")[0] === "save-button";
+
+		let data = {
 			title: $("#post-title").val(),
-			body: $("#post-body").val()
+			body: $("#post-body").val(),
+			isDraft: isDraft,
+			postId: $("#post-id").val()
 		};
 
 		$.ajax({
@@ -132,7 +139,11 @@ $(function() {
 					});
 				}
 			} else {
-				$(location).attr("href", "/");
+				if (isDraft) {
+					$(location).attr("href", "/post/edit/" + data.post.id);
+				} else {
+					$(location).attr("href", "/posts/" + data.post.url);
+				}
 			}
 		});
 	});
