@@ -52,7 +52,10 @@
         align-items: flex-start;
 
         .box {
-          margin-right: $freeSpace;
+          margin-left: $freeSpace;
+        }
+        .box:first-child {
+          margin-left: 0;
         }
       }
     }
