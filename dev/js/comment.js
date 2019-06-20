@@ -4,7 +4,14 @@ $(function() {
 	let commentForm;
 	let parentId;
 
+	//remove errors
+	function removeErrors() {
+		$("form.comment p.error").remove();
+		$("form.comment p.error").removeClass("error");
+	}
+
 	function form(isNew, comment) {
+		$(".reply").show();
 		if (commentForm) {
 			commentForm.remove();
 		}
@@ -12,6 +19,7 @@ $(function() {
 		commentForm = $(".comment").clone(true, true);
 
 		if (isNew) {
+			commentForm.find(".cancel").hide();
 			commentForm.appendTo(".comment-list");
 		} else {
 			let parentComment = $(comment).parent();
@@ -26,16 +34,20 @@ $(function() {
 	//add form
 	$(".reply").on("click", function() {
 		form(false, this);
+		$(this).hide();
 	});
 	//cancel form
 	$("form.comment .cancel").on("click", function(e) {
 		e.preventDefault();
 		commentForm.remove();
+		//load form after the last comment
+		form(true);
 	});
 
 	//publish
 	$("form.comment .send").on("click", function(e) {
 		e.preventDefault();
+		removeErrors();
 
 		var data = {
 			post: $(".comments").attr("id"),
@@ -51,14 +63,21 @@ $(function() {
 		}).done(function(data) {
 			console.log(data);
 			if (!data.ok) {
-				$(".post-form h2").after('<p class="error">' + data.error + "</p>");
-				if (data.fields) {
-					data.fields.forEach(function(item) {
-						$("#post-" + item).addClass("error");
-					});
+				if (data.error === undefined) {
+					data.error = "Неизвестная ошибка";
 				}
+				$(commentForm).prepend('<p class="error">' + data.error + "</p>");
 			} else {
-				$(location).attr("href", "/");
+				let newComment =
+					"<ul><li style='background:#ffffe0'><div class='head'><a href='/users/" +
+					data.login +
+					"'>" +
+					data.login +
+					"</a><span class='date'>Только что</span></div>" +
+					data.body +
+					"</li></ul>";
+				$(commentForm).after(newComment);
+				form(true);
 			}
 		});
 	});

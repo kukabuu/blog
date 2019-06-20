@@ -12,12 +12,19 @@ router.post("/add", async (req, res) => {
 
 	if (!userId || !userLogin) {
 		res.json({
-			ok: false //если юзер не авторизован, отправиться false
+			ok: false //если юзер не авторизован, отправится false
 		});
 	} else {
 		const post = req.body.post;
 		const body = req.body.body;
 		const parent = req.body.parent;
+
+		// if (!body) {
+		// 	res.json({
+		// 		ok: false,
+		// 		error: "Пустой комментарий"
+		// 	});
+		// }
 
 		try {
 			if (!parent) {
@@ -25,6 +32,11 @@ router.post("/add", async (req, res) => {
 					post,
 					body,
 					owner: userId
+				});
+				res.json({
+					ok: true,
+					body,
+					login: userLogin
 				});
 			} else {
 				const parentComment = await models.Comment.findById(parent);
@@ -45,6 +57,12 @@ router.post("/add", async (req, res) => {
 				children.push(comment.id);
 				parentComment.children = children;
 				await parentComment.save();
+
+				res.json({
+					ok: true,
+					body,
+					login: userLogin
+				});
 			}
 		} catch (error) {
 			res.json({
