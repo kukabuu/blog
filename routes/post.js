@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const tr = require("transliter");
 
 const models = require("../models");
 
@@ -35,19 +36,35 @@ router.get("/edit/:id", async (req, res, next) => {
 });
 
 //GET for add
-router.get("/add", (req, res) => {
+router.get("/add", async (req, res) => {
 	const userId = req.session.userId;
 	const userLogin = req.session.userLogin;
 
 	if (!userId || !userLogin) {
 		res.redirect("/");
 	} else {
-		res.render("post/edit", {
-			user: {
-				id: userId,
-				login: userLogin
+		try {
+			const post = await models.Post.findOne({
+				owner: userId,
+				status: "draft"
+			});
+
+			if (!post) {
+				const post = await models.Post.create({
+					owner: userId,
+					status: "draft"
+				});
 			}
-		});
+			await res.redirect(`/post/edit/${post.id}`);
+		} catch (error) {
+			console.log(error);
+		}
+		// res.render("post/edit", {
+		// 	user: {
+		// 		id: userId,
+		// 		login: userLogin
+		// 	}
+		// });
 	}
 });
 
@@ -63,6 +80,7 @@ router.post("/add", async (req, res) => {
 		const body = req.body.body.trim();
 		const isDraft = !!req.body.isDraft;
 		const postId = req.body.postId;
+		const url = `${tr.slugify(title)}-${Date.now().toString(36)}`;
 
 		if (!title || !body) {
 			const fields = [];
@@ -85,47 +103,41 @@ router.post("/add", async (req, res) => {
 				error: "Текст не менее 3 символов!",
 				fields: ["body"]
 			});
+		} else if (!postId) {
+			res.json({
+				ok: false
+			});
 		} else {
 			try {
-				if (postId) {
-					const post = await models.Post.findOneAndUpdate(
-						{
-							_id: postId,
-							owner: userId
-						},
-						{
-							title,
-							body,
-							owner: userId,
-							status: isDraft ? "draft" : "published"
-						},
-						{
-							new: true
-						}
-					);
-
-					if (!post) {
-						res.json({
-							ok: false,
-							error: "Пост не твой!"
-						});
-					} else {
-						res.json({
-							ok: true,
-							post
-						});
-					}
-				} else {
-					const post = await models.Post.create({
+				const post = await models.Post.findOneAndUpdate(
+					{
+						_id: postId,
+						owner: userId
+					},
+					{
 						title,
 						body,
-						owner: userId
+						url,
+						owner: userId,
+						status: isDraft ? "draft" : "published"
+					},
+					{
+						new: true
+					}
+				);
+
+				if (!post) {
+					res.json({
+						ok: false,
+						error: "Пост не твой!"
 					});
+				} else {
 					res.json({
 						ok: true,
 						post
 					});
 				}
+
 				//
 			} catch (error) {
 				res.json({
