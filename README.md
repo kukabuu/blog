@@ -1,4 +1,4 @@
-# blog
+# Blog
 My first project. Learning coding.  
 This site was made based on these lessons https://clck.ru/GqUTo.
 
