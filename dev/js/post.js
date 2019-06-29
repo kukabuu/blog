@@ -80,5 +80,18 @@ $(function() {
 			}
 		});
 	});
+	// inserting image
+	$(".img-container").on("click", function() {
+		let imageId = $(this).attr("id");
+		let txt = $("#post-body");
+		let caretPos = txt[0].selectionStart;
+		let textAreaTxt = txt.val();
+		let txtToAdd = "![alt text](image" + imageId + ")";
+		txt.val(
+			textAreaTxt.substring(0, caretPos) +
+				txtToAdd +
+				textAreaTxt.substring(caretPos)
+		);
+	});
 });
 /* eslint-enable no-undef */
