@@ -8,5 +8,7 @@
 	.container {
 		height: 100%;
 		line-height: $footerHeight;
+		align-items: center;
+		justify-content: center;
 	}
 }
