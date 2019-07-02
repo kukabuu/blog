@@ -18,7 +18,14 @@ const storage = diskStorage({
 	destination: (req, file, cb) => {
 		const dir = "/" + rs() + "/" + rs();
 		req.dir = dir;
-		mkdirp(config.DESTINATION + dir, err => cb(err, config.DESTINATION + dir));
+		mkdirp(config.DESTINATION + dir, (err, made) => {
+			if (err) {
+				console.log(err);
+			} else {
+				console.log(made);
+			}
+			cb(err, config.DESTINATION + dir);
+		});
 	},
 	filename: async (req, file, cb) => {
 		const userId = req.session.userId;
