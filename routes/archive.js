@@ -96,7 +96,6 @@ router.get("/posts/:post", async (req, res, next) => {
 						);
 					});
 				}
-
 				res.render("post/post", {
 					post: Object.assign(post, {
 						body: converter.makeHtml(body)

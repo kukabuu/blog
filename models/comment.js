@@ -27,7 +27,7 @@ const schema = new Schema(
 			{
 				type: Schema.Types.ObjectId,
 				ref: "Comment",
-				autopopulate: true
+				autopopulate: { maxDepth: 25 }
 			}
 		],
 		createdAt: {

@@ -39,18 +39,16 @@ router.get("/edit/:id", async (req, res, next) => {
 router.get("/add", async (req, res) => {
 	const userId = req.session.userId;
 	const userLogin = req.session.userLogin;
-
 	if (!userId || !userLogin) {
 		res.redirect("/");
 	} else {
 		try {
-			const post = await models.Post.findOne({
+			let post = await models.Post.findOne({
 				owner: userId,
 				status: "draft"
 			});
-
 			if (!post) {
-				const post = await models.Post.create({
+				post = await models.Post.create({
 					owner: userId,
 					status: "draft"
 				});

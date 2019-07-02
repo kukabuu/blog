@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const autopopulate = require("mongoose-autopopulate");
 //const URLSlugs = require("mongoose-url-slugs");
 
 const schema = new Schema(
@@ -15,7 +16,8 @@ const schema = new Schema(
 		},
 		owner: {
 			type: Schema.Types.ObjectId,
-			ref: "User"
+			ref: "User",
+			autopopulate: true
 		},
 		status: {
 			type: String,
@@ -49,17 +51,7 @@ schema.statics = {
 	}
 };
 
-// schema.pre("save", function(next) {
-// 	this.url = `${tr.slugify(this.title)}-${Date.now().toString(36)}`;
-// 	next();
-// });
-
-// schema.plugin(
-// 	URLSlugs("title", {
-// 		field: "url",
-// 		generator: text => tr.slugify(text)
-// 	})
-// );
+schema.plugin(autopopulate);
 
 //убираем нижнее подчеркивание в id
 schema.set("toJSON", {
